@@ -10,7 +10,7 @@ client: client.cc fleet.o
 	 $(CC) $(CCFLAGS) -o client client.cc fleet.o
 
 fleet.o: fleet.h fleet.cc
-	$(CC) $(CCFLAGS) -c fleet.cc
+	g++ -c fleet.cc
 
 clean:
 	rm -f *.o core a.out server client
