@@ -35,7 +35,7 @@ int main (int argc, char **argv) {
 		cout << "ARGV[" << i << "]: " << argv[i] << endl;
 	}
 	*/
-	vector<string> chat_log; //Holds a transcript of everything said here
+	vector<string> moves; //Holds a transcript of all the moves 
 
 	//Step 1. Create a socket
 	//Set up Zero MQ library to do networking for us
@@ -66,32 +66,32 @@ int main (int argc, char **argv) {
 #endif
 
 		if (data == "LOGIN") {
-			chat_log.push_back(username + " joined the chat.");
+			moves.push_back(username + " joined the chat.");
 			if (users.count(username) == 0) { // New user
 				//Get all chat
 				//users.insert({username,{username,0}}); //Save their name and set their last_read to 0
 				//Get last 10 chat
 				size_t last = 0;
-				if (chat_log.size() > 10) last = chat_log.size() - 10;
+				if (moves.size() > 10) last = moves.size() - 10;
 				users.insert({username,{username,last}}); //Save their name and set their last_read to 0
 			}
 		}
 		//Handle a user disconnecting
 		else if (data == "LOGOUT") {
-			chat_log.push_back(username + " left the chat.");
+			moves.push_back(username + " left the chat.");
 		}
 		else if (data == "") { //The client sent a heartbeat so update their chat
 		}
 		else {
-			chat_log.push_back(read);
+			moves.push_back(read);
 		}
 		//No matter what command they give, update the client with all lines they've missed
 		size_t last_read = users[username].last_read;
 		//Build a string of all the lines they've missed from the chat log
 		string temp;
-		for (size_t i = last_read; i < chat_log.size(); i++) temp += chat_log.at(i) + '\n'; 
+		for (size_t i = last_read; i < moves.size(); i++) temp += moves.at(i) + '\n'; 
 		s_send(socket,temp); //Send it to the client
-		users[username].last_read = chat_log.size(); //Record where they last read
+		users[username].last_read = moves.size(); //Record where they last read
 	}
 	return 0;
 }

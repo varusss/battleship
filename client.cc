@@ -60,7 +60,7 @@ int main (int argc, char **argv)
 	//Step 2. Connect to server
 	string hostname = "localhost";
 	if (argc > 2) hostname = argv[1];
-	const int DEFAULT_PORT = 3030; //Change this to any port above 1024
+	const int DEFAULT_PORT = 2020; //Change this to any port above 1024
 	int port = DEFAULT_PORT;
 	//You can run it like this: client 2000 to bind it to a different port
 	try {
@@ -125,119 +125,7 @@ int main (int argc, char **argv)
 		usleep(5000);
 	}
 
-	/*
-	int ROWS = 40, COLS = 20;
- 	getmaxyx(stdscr, ROWS, COLS); //Read the terminals ROWS and COLS. TODO: Check for KEY_REFRESH
-	idlok(stdscr,true);
-	scrollok(stdscr,true);
-	setscrreg(1,ROWS-3);
 
-	clear(); //Erase screen
-
-	move(0,0); //Move to top left
-	printw("CSCI4X Chat");
-
-	move(ROWS-1,0); //Move to bottom, two rows up
-	printw("%s: TYPE YOUR CHAT HERE",username.c_str());
-
-	//Step 4. Receive data from the server
-	move(1,0); //Move cursor to the second line
-	string response = s_recv(socket);
-	printw("%s",response.c_str());
-	refresh();
-
-	int x = 0, y = 0; //Location in the world
-	string current_str; //What the user is currently typing
-	while(1)
-	{
-		int ch = getch();
-		int cursor_y = 0, cursor_x = 0;
-		getyx(stdscr,cursor_y,cursor_x); //Gets current cursor location
-		
-		//move(ROWS-1,0);
-		//printw("Cursor location: %i %i",cursor_y,cursor_x);
-		//refresh();
-		
-		move(cursor_y,cursor_x);
-
-        if (ch == ERR) { //No keystroke
-            ; //Do nothing
-        }
-		//TODO: Add mouse support, I'm commenting this out for now
-		else if(ch == KEY_MOUSE) { //Handle mouse events
-			MEVENT mouse; //Struct for holding mouse events
-			getmouse(&mouse);
-
-			//move(0,0);
-			//clrtoeol();
-			//printw("%d\t%d\n",mouse.y,mouse.x);
-			//mvprintw(mouse.y,mouse.x,"🤣"); //Move + printw
-			//refresh();
-		}
-		//Handle arrow keys
-		//TODO: Have them scroll the chat buffer, they don't do anything right now
-        else if (ch == KEY_RIGHT) {
-            x++;
-			if (x >= COLS) x = COLS-1;
-        }
-        else if (ch == KEY_LEFT) {
-            x--;
-            if (x < 0) x = 0;
-        }
-        else if (ch == KEY_UP) {
-            y--;
-            if (y < 0) y = 0;
-        }
-        else if (ch == KEY_DOWN) {
-            y++;
-			if (y >= ROWS) y = ROWS - 1;
-        }
-		//Handle special keys like delete and enter
-		else if (ch == KEY_DC or ch == KEY_BACKSPACE or ch == '') { //Delete keys
-			if (current_str.size())
-				current_str.pop_back();
-			move(ROWS-1,0); //Move to bottom
-			clrtoeol(); //Erase the whole line
-			printw("%s: %s\n",username.c_str(),current_str.c_str());
-			move(cursor_y,cursor_x); //Put cursor back where it was
-			refresh();
-		}
-		//ctrl-u erases everything typed
-		else if (ch == KEY_DL) { //Delete line
-			current_str.clear(); //Erase everything we've typed
-		}
-		else {
-			char c = (char) ch; //Convert ch to char
-			if (isprint(c) and ch != KEY_ENTER and c != ':') { //Make sure it's a printable character before adding it
-				current_str += c; //Add it to the string we're typing
-				move(ROWS-1,0); //Move to bottom
-				printw("%s: %s\n",username.c_str(),current_str.c_str());
-				move(cursor_y,cursor_x); //Put cursor back where it was
-			}
-		}
-
-		//Send a line of chat if they hit enter
-		if (ch == KEY_ENTER or ch == '\n') {
-			if (current_str == "QUIT" or current_str == "quit") exit(0);
-			s_send(socket,username + ":" + current_str);
-			current_str.clear(); //Erase the current line
-			move(ROWS-1,0); //Move to bottom
-			printw("%s: %s\n",username.c_str(),current_str.c_str());
-			move(cursor_y,cursor_x); //Put cursor back where it was
-		}
-		else //Heartbeat the server to get updates
-			s_send(socket,username + ":");
-		string response = s_recv(socket); //Get update from server
-		if (response != "") //Ignore empty heartbeat
-			printw("%s",response.c_str());
-
-		if (ch == ERR and response == "") 
-			; //Nothing happened, don't refresh
-		else
-			refresh();
-		usleep(1'000'000 / MAXFPS); //Cap frame rate at FPS
-	}
-*/	
 	endwin(); //Turn off NCURSES
 	return 0;
 }
