@@ -60,7 +60,7 @@ int main (int argc, char **argv)
 	//Step 2. Connect to server
 	string hostname = "localhost";
 	if (argc > 2) hostname = argv[1];
-	const int DEFAULT_PORT = 2020; //Change this to any port above 1024
+	const int DEFAULT_PORT = 3030; //Change this to any port above 1024
 	int port = DEFAULT_PORT;
 	//You can run it like this: client 2000 to bind it to a different port
 	try {
@@ -99,23 +99,43 @@ int main (int argc, char **argv)
 	timeout(10);
 	int x = 5, y=5;
 
+	bool orient = false;
+	int ship_size = 2;
 	while(true){
+
+		move(15,30);
+		printw("Rotate Ship");
+		move(16,30);
+		if (orient) 
+			printw("Vertical");
+		else 
+			printw("Horizontal");
+
 		int ch = wgetch(stdscr);
 		if (ch == 'q' || ch == 'Q') break;
 		map.draw(x,y);
-		//mvprintw(11,11 ,"x: %i y: %i\n", x,y);
-
-        if (ch == ERR) { //No keystroke
-            ; //Do nothing
-        }
-		//TODO: Add mouse support, I'm commenting this out for now
+		if (ch == ERR) { //No keystroke
+			; //Do nothing
+		}
 		else if(ch == KEY_MOUSE) { //Handle mouse events
 			MEVENT mouse;
 			if (OK == getmouse(&mouse)) {
 				move(24,0);
 				printw("Cursor Location: %i %i", mouse.y, mouse.x);
-				int ship_size = 3;
-				map.change(mouse.y,mouse.x,ship_size, 0);
+				if ((mouse.y> 14 and mouse.y < 17) and (mouse.x >29 and mouse.x < 34))  {
+					orient = !orient;
+					continue;
+				}
+				int error=map.change(mouse.y,mouse.x,ship_size, orient);
+				if (error == 0) ship_size++;
+				if (error == 1) {
+					move(25,0);
+					printw("BAD LOCATION");
+				}
+				if (error ==2) {
+					move(26,0);
+					printw("MAX SHIP");
+				}
 			}
 			else printw("BAD EVENT");
 			refresh();

@@ -12,9 +12,10 @@ class Map {
 	public:
 	static const char WALL     = '.';
 	static const char SHIP     = '#';
+	static const char EMPTY    = ' ';
 	static const size_t SIZE = 20; //10X10 map 
 	static const size_t DISPLAY = 20; //Show a 10x10 area at a time
-
+	int battleships = 0;
 	//Randomly generate map
 	void init_map() {
 		map.clear();
@@ -23,7 +24,7 @@ class Map {
 		for (size_t i = 0; i < SIZE; i++) {
 			for (size_t j = 0; j < SIZE; j++) {	
 				if (j%2 and i%2)map.at(i).at(j) = WALL;
-				else map.at(i).at(j) = ' ';
+				else map.at(i).at(j) = EMPTY;
 			} 
 		}
 	}
@@ -45,13 +46,31 @@ class Map {
 			}
 		}
 	}
-	void change(int x, int y, int size, int orient){
-		if (x%2) x/=2 *2;
-		if (y%2) y/=2 *2;
-		if (orient == 0) {
-			for (int i =0; i < size; i++)
-				map.at(x + i*2).at(y +i*2) = SHIP;
+	int change(int x, int y, int size, bool orient){
+		const int SUCESS = 0, BAD_POS = 1, MAX_SHIP =2;
+		if (size >=7) return MAX_SHIP ;
+		if (x >= SIZE) return BAD_POS;
+		if (y >= SIZE) return BAD_POS;
+		if (map.at(x).at(y) == EMPTY) {
+			if (y%2 == 0)y -=1;
+			if (x%2 == 0)x -=1;
 		}
+		if (!orient) {
+			if (y+size >= SIZE) return BAD_POS;
+			for (int i = 0; i < size; i++)
+				if (map.at(x).at(y + i*2) == SHIP) return BAD_POS;
+			for (int i =0; i < size; i++)
+				map.at(x).at(y +i*2) = SHIP;
+		}
+		else if (orient){
+			if (x+size >= SIZE) return BAD_POS;
+			for (int i = 0; i < size; i++)
+				if (map.at(x+i*2).at(y) == SHIP) return BAD_POS;
+			for (int i =0; i < size; i++)
+				map.at(x+i*2).at(y) = SHIP;
+		}
+		battleships++;
+		return SUCESS;
 	}
 	Map() {
 		init_map();
