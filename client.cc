@@ -35,8 +35,8 @@ void bail_out(int s = 0) {
 //Step 1. Make a socket
 //Step 2. Connect to server (hostname+port)
 //In a loop:
-	//Step 3. Send to server
-	//Step 4. Receive from server
+//Step 3. Send to server
+//Step 4. Receive from server
 
 //I decided to use colons as field separators, so no colons can be used in strings
 bool hascolon(const string &s) {
@@ -103,11 +103,12 @@ int main (int argc, char **argv)
 	int ship_size = 2;
 	while(true){
 
-		move(15,30);
+		move(24,30);
 		printw("Rotate Ship");
-		move(16,30);
-		if (orient) 
+		move(25,30);
+		if (orient){ 
 			printw("Vertical");
+		}
 		else 
 			printw("Horizontal");
 
@@ -122,9 +123,32 @@ int main (int argc, char **argv)
 			if (OK == getmouse(&mouse)) {
 				move(24,0);
 				printw("Cursor Location: %i %i", mouse.y, mouse.x);
-				if ((mouse.y> 14 and mouse.y < 17) and (mouse.x >29 and mouse.x < 34))  {
+				if ((mouse.y == 24) and (mouse.x >29 and mouse.x < 35))  {
+					//change the orientation of the ship
 					orient = !orient;
 					continue;
+				}
+				if ((mouse.y == 26) and (mouse.x >29 and mouse.x <35)){
+					//TODO
+					//send data to server
+					//make two map, one for guessing and one for client map
+					move(28,30);
+					printw("Send data");
+					map.draw_enemy_field();
+				}
+				if ((mouse.x >=30 and mouse.x < 50) and (mouse.y >=0 and mouse.y < Map::SIZE)) {
+					move(30, 30);
+					printw("click");
+					int check_enemy_ship = map.check_for_ship(mouse.y,mouse.x);
+				
+					if (check_enemy_ship == 1){
+						move(32,30);
+						printw("Hit");
+					}
+					else  {
+						move(32,30);
+						printw("Miss");
+					}		
 				}
 				int error=map.change(mouse.y,mouse.x,ship_size, orient);
 				if (error == 0) ship_size++;
@@ -136,8 +160,15 @@ int main (int argc, char **argv)
 					move(26,0);
 					printw("MAX SHIP");
 				}
+				if (ship_size >=7) {
+					move(26,30);
+					printw("DONE");
+				}
 			}
-			else printw("BAD EVENT");
+			else {
+				move(21,0);
+				printw("BAD EVENT");
+			}
 			refresh();
 			usleep(4000);
 		}

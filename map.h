@@ -8,6 +8,7 @@ using namespace std; //Boo hiss
 
 class Map {
 	vector<vector<char>> map;
+	vector<vector<char>> enemy_map;
 	default_random_engine gen;
 	public:
 	static const char WALL     = '.';
@@ -15,16 +16,26 @@ class Map {
 	static const char EMPTY    = ' ';
 	static const size_t SIZE = 20; //10X10 map 
 	static const size_t DISPLAY = 20; //Show a 10x10 area at a time
-	int battleships = 0;
 	//Randomly generate map
 	void init_map() {
 		map.clear();
 		map.resize(SIZE); 
+		
+		enemy_map.clear();
+		enemy_map.resize(SIZE);
+		for (auto &v: enemy_map) v.resize(SIZE);
 		for (auto &v : map) v.resize(SIZE,'.'); //100 columns wide
+		
 		for (size_t i = 0; i < SIZE; i++) {
 			for (size_t j = 0; j < SIZE; j++) {	
-				if (j%2 and i%2)map.at(i).at(j) = WALL;
-				else map.at(i).at(j) = EMPTY;
+				if (j%2 and i%2) {
+					map.at(i).at(j) = WALL;
+					enemy_map.at(i).at(j) = WALL;
+				}
+				else {
+					map.at(i).at(j) = EMPTY;
+					enemy_map.at(i).at(j) = EMPTY;
+				}
 			} 
 		}
 	}
@@ -39,6 +50,8 @@ class Map {
 				if (map.at(i).at(j) == WALL){
 					color = 2;
 				}
+				else if (map.at(i).at(j) == SHIP) 
+					color = 3;
 				attron(COLOR_PAIR(color));
 				mvaddch(i,j,map.at(i).at(j));
 				attroff(COLOR_PAIR(color));
@@ -46,30 +59,68 @@ class Map {
 			}
 		}
 	}
+
+	void draw_enemy_field(){
+		for(size_t i = 0; i < SIZE; i++){
+			for (size_t j =0 ; j< SIZE; j++){
+				move(i,30+j);
+				if (j%2 and i%2) printw(".");
+				else printw(" ");
+			}
+		}
+	}
+
+	int check_for_ship(int x, int y){
+		const int MISS = 0,
+			  	  HIT = 1,
+				  E = 2;
+		if (enemy_map.at(x).at(y-30) == SHIP) {
+			move(x,y);
+			printw("X");
+			return HIT;
+		}
+		if (enemy_map.at(x).at(y-30) == WALL) {
+			move(x,y);
+			printw("M");
+			return MISS;
+		}
+		return E;
+	}
+
+
 	int change(int x, int y, int size, bool orient){
-		const int SUCESS = 0, BAD_POS = 1, MAX_SHIP =2;
+		const int SUCESS = 0, 
+			  	  BAD_POS = 1, 
+				  MAX_SHIP =2;
 		if (size >=7) return MAX_SHIP ;
 		if (x >= SIZE) return BAD_POS;
 		if (y >= SIZE) return BAD_POS;
 		if (map.at(x).at(y) == EMPTY) {
-			if (y%2 == 0)y -=1;
-			if (x%2 == 0)x -=1;
+			if (y%2 == 0) {
+				if (y <=0) return BAD_POS;
+				y -=1;
+			}
+			if (x%2 == 0) {
+				if (x <=0) return BAD_POS;
+				x -=1;
+			}
 		}
 		if (!orient) {
-			if (y+size >= SIZE) return BAD_POS;
-			for (int i = 0; i < size; i++)
+			for (int i = 0; i < size; i++){
+				if (y+i*2 >= SIZE) return BAD_POS;
 				if (map.at(x).at(y + i*2) == SHIP) return BAD_POS;
+			}
 			for (int i =0; i < size; i++)
 				map.at(x).at(y +i*2) = SHIP;
 		}
 		else if (orient){
-			if (x+size >= SIZE) return BAD_POS;
-			for (int i = 0; i < size; i++)
+			for (int i = 0; i < size; i++){
+				if (x+i*2 >= SIZE) return BAD_POS;
 				if (map.at(x+i*2).at(y) == SHIP) return BAD_POS;
+			}
 			for (int i =0; i < size; i++)
 				map.at(x+i*2).at(y) = SHIP;
 		}
-		battleships++;
 		return SUCESS;
 	}
 	Map() {
