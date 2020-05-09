@@ -101,8 +101,8 @@ int main (int argc, char **argv)
 
 	bool orient = false;
 	int ship_size = 2;
+	
 	while(true){
-
 		move(24,30);
 		printw("Rotate Ship");
 		move(25,30);
@@ -168,7 +168,7 @@ int main (int argc, char **argv)
 				}
 			}
 			else {
-				move(21,0);
+				move(22,0);
 				printw("BAD EVENT");
 			}
 			refresh();
