@@ -14,6 +14,7 @@ client: client.cc fleet.o player.o
 
 fleet.o: fleet.h fleet.cc
 	g++ -c fleet.cc
+
 player.o: player.h player.cc
 	g++ -c player.cc
 

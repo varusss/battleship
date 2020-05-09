@@ -1,6 +1,4 @@
-#include <locale.h>
-#include <curses.h>
-#include <unistd.h>
+#pragma once
 #include "fleet.h"
 #include <string>
 
