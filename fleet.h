@@ -1,19 +1,17 @@
 #include <vector>
-struct Coordinate{
-	int x, y;
-};
+#include "ship.h"
 
 class Fleet {
-	std::vector<Coordinate> carrier;	
-	std::vector<Coordinate> battleship;	
-	std::vector<Coordinate> cruiser;	
-	std::vector<Coordinate> submarine;
-	std::vector<Coordinate> destroyer;
+	std::vector<Ship> carrier;	
+	std::vector<Ship> battleship;	
+	std::vector<Ship> cruiser;	
+	std::vector<Ship> submarine;
+	std::vector<Ship> destroyer;
 	public:
 		Fleet();
-		Fleet(std::vector<Coordinate> carrier, 
-			  std::vector<Coordinate> battleship,
-			  std::vector<Coordinate> cruiser,
-			  std::vector<Coordinate> submarine,
-			  std::vector<Coordinate> destroyer);
+		Fleet(std::vector<Ship> carrier, 
+			  std::vector<Ship> battleship,
+			  std::vector<Ship> cruiser,
+			  std::vector<Ship> submarine,
+			  std::vector<Ship> destroyer);
 };
