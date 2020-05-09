@@ -1,17 +1,10 @@
 #pragma once
+#include <vector>
 #include "ship.h"
 
 class Fleet {
-	Ship carrier;	
-	Ship battleship;	
-	Ship cruiser;	
-	Ship submarine;
-	Ship destroyer;
+	std::vector<Ship> fleet;
 	public:
 		Fleet();
-		Fleet(Ship carrier, 
-			  Ship battleship,
-			  Ship cruiser,
-			  Ship submarine,
-			  Ship destroyer);
+		Fleet(std::vector<Ship> fleet);
 };

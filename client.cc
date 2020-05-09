@@ -5,6 +5,7 @@
 #include <string>
 #include <iostream>
 #include "map.h"
+#include "fleet.h"
 using namespace std;
 using namespace zmq;
 
@@ -99,9 +100,9 @@ int main (int argc, char **argv)
 	timeout(10);
 	int x = 5, y=5;
 
-	bool orient = false;
+	bool orient = false, flag_for_submarine = false;
 	int ship_size = 2;
-	
+	Fleet player_fleet;	
 	while(true){
 		move(24,30);
 		printw("Rotate Ship");
@@ -152,7 +153,13 @@ int main (int argc, char **argv)
 						printw("Miss");
 					}		
 				}
-				int error=map.change(mouse.y,mouse.x,ship_size, orient);
+				if (flag_for_submarine == false && ship_size == 4) {
+					ship_size--;	
+					flag_for_submarine = !flag_for_submarine;
+				}
+				int error = 0;
+				if (ship_size < 6) 
+					error=map.change(mouse.y,mouse.x,ship_size, orient, player_fleet);
 				if (error == 0) ship_size++;
 				if (error == 1) {
 					move(25,0);
@@ -162,7 +169,7 @@ int main (int argc, char **argv)
 					move(26,0);
 					printw("MAX SHIP");
 				}
-				if (ship_size >=7) {
+				if (ship_size >5) {
 					move(26,30);
 					printw("DONE");
 				}
