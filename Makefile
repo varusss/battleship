@@ -1,7 +1,7 @@
 CC = g++
 CCFLAGS = -Wall -Wextra -std=c++2a -g -O3 -lzmq -lncursesw
 
-all: server client fleet.o player.o
+all: server client player.o
 
 server: server.cc
 	 $(CC) $(CCFLAGS) -o server server.cc 
@@ -9,11 +9,8 @@ server: server.cc
 blockingclient: blockingclient.cc
 	 $(CC) $(CCFLAGS) -o blockingclient blockingclient.cc
 
-client: client.cc fleet.o player.o
-	 $(CC) $(CCFLAGS) -o client client.cc fleet.o player.o
-
-fleet.o: fleet.h fleet.cc
-	g++ -c fleet.cc
+client: client.cc player.o
+	 $(CC) $(CCFLAGS) -o client client.cc player.o
 
 player.o: player.h player.cc
 	g++ -c player.cc

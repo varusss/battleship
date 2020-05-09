@@ -5,7 +5,7 @@
 #include <string>
 #include <iostream>
 #include "map.h"
-#include "fleet.h"
+#include "player.h"
 using namespace std;
 using namespace zmq;
 
@@ -69,7 +69,9 @@ int main (int argc, char **argv)
 		else if (argc > 2) port = stoi(argv[2]);
 	} catch (...) { port = DEFAULT_PORT; }
 
-	cout << "Connecting to chat server..." << endl;
+	string figlet = "figlet Welcome to BATTLESLOOP 41";
+	system(figlet.c_str());
+	cout << "Connecting to server..." << endl;
 	socket.connect ("tcp://"s + hostname + ":" + to_string(port));
 	cout << "Please enter your name:\n";
 	getline(cin,username);
@@ -87,7 +89,8 @@ int main (int argc, char **argv)
 		cout << "Couldn't set locale.\n";
 		exit(EXIT_FAILURE);
 	}
-
+	vector<Ship> ships;
+	Player player{username,ships};
 	Map map;
 	initscr();
 	noecho();
@@ -99,10 +102,8 @@ int main (int argc, char **argv)
 	mousemask(ALL_MOUSE_EVENTS,NULL); //Enable mouse support
 	timeout(10);
 	int x = 5, y=5;
-
 	bool orient = false, flag_for_submarine = false;
 	int ship_size = 2;
-	Fleet player_fleet;	
 	while(true){
 		move(24,30);
 		printw("Rotate Ship");
@@ -159,7 +160,7 @@ int main (int argc, char **argv)
 				}
 				int error = 0;
 				if (ship_size < 6) 
-					error=map.change(mouse.y,mouse.x,ship_size, orient, player_fleet);
+					error=map.change(mouse.y,mouse.x,ship_size, orient);
 				if (error == 0) ship_size++;
 				if (error == 1) {
 					move(25,0);

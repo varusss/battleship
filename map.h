@@ -4,7 +4,6 @@
 #include <iostream>
 #include <random>
 #include <ncurses.h>
-#include "fleet.h"
 using namespace std; //Boo hiss
 
 class Map {
@@ -87,11 +86,11 @@ class Map {
 	}
 
 
-	int change(int x, int y, int size, bool orient, Fleet &player_fleet){
-		const int SUCESS = 0, 
+	int change(int x, int y, int size, bool orient){
+		const int SUCCESS = 0, 
 			  	  BAD_POS = 1, 
 				  MAX_SHIP =2;
-		if (size >=7) return MAX_SHIP;
+		if (size > 5) return MAX_SHIP;
 		if (x >= SIZE) return BAD_POS;
 		if (y >= SIZE) return BAD_POS;
 		if (map.at(x).at(y) == EMPTY) {
@@ -111,7 +110,6 @@ class Map {
 			}
 			for (int i =0; i < size; i++){
 				map.at(x).at(y +i*2) = SHIP;
-				fleet.
 			}
 		}
 		else if (orient){
@@ -122,7 +120,7 @@ class Map {
 			for (int i =0; i < size; i++)
 				map.at(x+i*2).at(y) = SHIP;
 		}
-		return SUCESS;
+		return SUCCESS;
 	}
 	Map() {
 		init_map();

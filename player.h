@@ -1,11 +1,12 @@
 #pragma once
-#include "fleet.h"
+#include "ship.h"
 #include <string>
 
 class Player {
 	std::string name;
-	Fleet fleet;	
+	std::vector<Ship> ships;	
 	public:
-		Player(std::string name, Fleet fleet);
-
+		Player();
+		Player(std::string name);
+		Player(std::string name, std::vector<Ship> ships);
 };
