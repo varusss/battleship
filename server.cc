@@ -8,6 +8,7 @@
 #include <sstream>
 #include <unistd.h>
 #include <unordered_map>
+#include "map.h"
 using namespace std;
 using namespace zmq;
 

@@ -111,6 +111,8 @@ int main (int argc, char **argv)
 		}
 		else 
 			printw("Horizontal");
+		move(22,0);
+		printw("Ship size: %i", ship_size);
 
 		int ch = wgetch(stdscr);
 		if (ch == 'q' || ch == 'Q') break;

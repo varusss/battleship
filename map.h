@@ -8,12 +8,13 @@ using namespace std; //Boo hiss
 
 class Map {
 	vector<vector<char>> map;
-	vector<vector<char>> enemy_map;
 	default_random_engine gen;
 	public:
-	static const char WALL     = '.';
-	static const char SHIP     = '#';
-	static const char EMPTY    = ' ';
+	static const char WALL      = '.';
+	static const char SHIP      = '#';
+	static const char EMPTY     = ' ';
+	static const char ENEMY_HIT = 'O';
+	static const char ENEMY_MISS= 'E';
 	static const size_t SIZE = 20; //10X10 map 
 	static const size_t DISPLAY = 20; //Show a 10x10 area at a time
 	//Randomly generate map
@@ -21,20 +22,15 @@ class Map {
 		map.clear();
 		map.resize(SIZE); 
 		
-		enemy_map.clear();
-		enemy_map.resize(SIZE);
-		for (auto &v: enemy_map) v.resize(SIZE);
 		for (auto &v : map) v.resize(SIZE,'.'); //100 columns wide
 		
 		for (size_t i = 0; i < SIZE; i++) {
 			for (size_t j = 0; j < SIZE; j++) {	
 				if (j%2 and i%2) {
 					map.at(i).at(j) = WALL;
-					enemy_map.at(i).at(j) = WALL;
 				}
 				else {
 					map.at(i).at(j) = EMPTY;
-					enemy_map.at(i).at(j) = EMPTY;
 				}
 			} 
 		}
@@ -74,12 +70,14 @@ class Map {
 		const int MISS = 0,
 			  	  HIT = 1,
 				  E = 2;
-		if (enemy_map.at(x).at(y-30) == SHIP) {
+		if (map.at(x).at(y-30) == SHIP) {
+			map.at(x).at(y-30) = ENEMY_HIT;
 			move(x,y);
 			printw("X");
 			return HIT;
 		}
-		if (enemy_map.at(x).at(y-30) == WALL) {
+		if (map.at(x).at(y-30) == WALL) {
+			map.at(x).at(y-30) = ENEMY_MISS;
 			move(x,y);
 			printw("M");
 			return MISS;
