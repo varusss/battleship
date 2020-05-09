@@ -11,6 +11,7 @@ struct Coordinate {
 struct Ship {
 	std::string type;
 	std::vector<Coordinate> coordinates;
+	Ship() {};
 	Ship(std::string type, std::vector<Coordinate> coordinates) : type(type), coordinates(coordinates){}
 };
 

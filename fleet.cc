@@ -1,11 +1,5 @@
-#include <iostream>
 #include "fleet.h"
 Fleet::Fleet() {}; 
 
-Fleet::Fleet(std::vector<Coordinate> carrier, std::vector<Coordinate> battleship, std::vector<Coordinate> cruiser, std::vector<Coordinate> submarine, std::vector<Coordinate> destroyer) {
-	carrier = carrier;
-	battleship = battleship;
-	cruiser = cruiser;
-	submarine = submarine;
-	destroyer = destroyer;	
-};
+Fleet::Fleet(Ship carrier, Ship battleship, Ship cruiser, Ship submarine, Ship destroyer) :
+carrier(carrier), battleship(battleship), cruiser(cruiser), submarine(submarine), destroyer(destroyer)	{};
