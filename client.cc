@@ -89,19 +89,17 @@ int main (int argc, char **argv)
 		cout << "Couldn't set locale.\n";
 		exit(EXIT_FAILURE);
 	}
-	vector<Ship> ships;
-	Player player{username,ships};
 	Map map;
 	initscr();
 	noecho();
 	cbreak(); //Disable input buffering since I will do this myself
-	//curs_set(0); //Hide the cursor
+	curs_set(0); //Hide the cursor
 	keypad(stdscr,TRUE); //Enable extended input from NCURSES
 	timeout(0); //Nonblocking IO
 	const int MAXFPS = 60; //Cap framerate at 30fps
 	mousemask(ALL_MOUSE_EVENTS,NULL); //Enable mouse support
 	timeout(10);
-	int x = 5, y=5;
+	int x = 5, y = 5;
 	bool orient = false, flag_for_submarine = false;
 	int ship_size = 2;
 	while(true){
@@ -119,6 +117,7 @@ int main (int argc, char **argv)
 		int ch = wgetch(stdscr);
 		if (ch == 'q' || ch == 'Q') break;
 		map.draw(x,y);
+		map.draw_enemy_field();
 		if (ch == ERR) { //No keystroke
 			; //Do nothing
 		}
@@ -138,7 +137,6 @@ int main (int argc, char **argv)
 					//make two map, one for guessing and one for client map
 					move(28,30);
 					printw("Send data");
-					map.draw_enemy_field();
 				}
 				if ((mouse.x >=30 and mouse.x < 50) and (mouse.y >=0 and mouse.y < Map::SIZE)) {
 					move(30, 30);

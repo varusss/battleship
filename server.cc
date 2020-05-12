@@ -12,6 +12,7 @@
 using namespace std;
 using namespace zmq;
 
+#define DEBUG 1
 //To create an internet server (using ZMQ)
 //1. Create a socket
 //2. Bind it to a port 
@@ -89,10 +90,16 @@ int main (int argc, char **argv) {
 		//No matter what command they give, update the client with all lines they've missed
 		size_t last_read = users[username].last_read;
 		//Build a string of all the lines they've missed from the chat log
-		string temp;
-		for (size_t i = last_read; i < moves.size(); i++) temp += moves.at(i) + '\n'; 
+		string temp= "HELLO WORLD?!?!";
+//		usleep(1'000'000);
+		s_send(socket,temp); //Send it to the client
+//		usleep(1'000'000);
+		/*
+		for (size_t i = last_read; i < moves.size(); i++) 
+			temp += moves.at(i) + '\n'; 
 		s_send(socket,temp); //Send it to the client
 		users[username].last_read = moves.size(); //Record where they last read
+		*/
 	}
 	return 0;
 }

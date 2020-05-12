@@ -9,8 +9,8 @@ server: server.cc
 blockingclient: blockingclient.cc
 	 $(CC) $(CCFLAGS) -o blockingclient blockingclient.cc
 
-client: client.cc player.o
-	 $(CC) $(CCFLAGS) -o client client.cc player.o
+client: client2.cc player.o
+	 $(CC) $(CCFLAGS) -o client client2.cc player.o
 
 player.o: player.h player.cc
 	g++ -c player.cc
